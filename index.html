@@ -1,0 +1,156 @@
+<html>
+
+<head>
+    <title>Simple UI-Router Menu (Simple Navigation)</title>
+
+    <link rel="stylesheet" media="screen" href="https://internetpf.itau.com.br/estatico/commons/css/normalize.css">
+    <link rel="stylesheet" media="screen" href="https://internetpf.itau.com.br/estatico/commons/css/itau-style.css">
+    <link rel="stylesheet" media="screen" href="https://internetpf.itau.com.br/estatico/commons/css/itau-header.css">
+    <link rel="stylesheet" media="screen" href="https://internetpf.itau.com.br/estatico/commons/css/itau-footer.css">
+    <link rel="stylesheet" media="screen" href="https://internetpf.itau.com.br/estatico/commons/css/chosen/chosen.css">
+
+    <script type="text/javascript" src="https://internetpf.itau.com.br/estatico/distribution/libs/1.0.7/libs.js"></script>
+    <script type="text/javascript" src="https://internetpf.itau.com.br/estatico/distribution/core/2.3.0/core.js"></script>
+    <script type="text/javascript" src="https://internetpf.itau.com.br/estatico/distribution/front/1.0.21/front.js"></script>
+
+    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.7.0/angular-locale_pt-br.min.js"></script>
+
+    <script type='text/javascript' src="ui-bootstrap-datepicker/ui-bootstrap-datepicker.min.js"></script>
+
+    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.min.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+
+    <link rel="stylesheet" href="date-range-picker.css">
+
+
+
+
+    <script>
+        (function () {
+            angular.module('myApp.controllers', []);
+
+            var myApp = angular.module('myApp', [
+                'myApp.controllers',
+                'ui.bootstrap',
+            ]);
+
+            var state2Controller = function ($scope, $timeout) {
+
+                var today = new Date();
+                var mm = today.getMonth();
+                var yyyy = today.getFullYear();
+
+
+                var
+                    vm = this,
+                    selected = new Date(),
+                    tomorrow = new Date(),
+                    select = 0;
+
+                vm.dt = null;
+
+                vm.options1 = {
+                    formatMonth: "MMM",
+                    customClass: getDayClass,
+                    minDate: new Date(2002, 0),
+                    maxDate: new Date(2018, 4),
+                    initDate: new Date(2017, 0),
+                    showWeeks: false,
+                    datepickerMode: 'month',
+                    minMode: 'month',
+                    maxMode: 'month',
+                    monthColumns: 4
+                };
+
+                vm.options2 = {
+                    formatMonth: "MMM",
+                    customClass: getDayClass,
+                    minDate: new Date(2002, 0),
+                    maxDate: new Date(2018, 4),
+                    startDate: new Date(2018, 4),
+                    showWeeks: false,
+                    datepickerMode: 'month',
+                    minMode: 'month',
+                    maxMode: 'month',
+                    monthColumns: 4
+                };
+
+                vm.change = function (inDate) {
+                    if (select === 0) {
+                        vm.dt2 = null;
+                        vm.dt1 = inDate;
+                    } else {
+                        vm.dt2 = inDate;
+
+                        if (vm.dt1 && inDate <= vm.dt1) {
+                            vm.dt2 = vm.dt1;
+                            vm.dt1 = inDate;
+                        }
+                    }
+                    select = (select + 1) % 2;
+
+                    if (vm.dt1) {
+                        vm.date1 = new Date(vm.dt1);
+                        console.log("date1 set");
+                    }
+                    if (vm.dt2) {
+                        vm.date2 = new Date(vm.dt2);
+                    } else {
+                        vm.date2 = null;
+                    }
+                }
+
+                function getDayClass(data) {
+                    var
+                        date = data.date,
+                        mode = data.mode;
+
+                    if (vm.dt1 && date.getTime() == vm.dt1.getTime()) {
+                        return 'period active';
+                    }
+
+                    if (vm.dt2 && date >= vm.dt1 && date <= vm.dt2) {
+                        return 'period active';
+                    }
+
+                    if (date >= vm.options1.minDate && date <= vm.options1.maxDate) {
+                        return 'period';
+                    }
+                    return '';
+                }
+            };
+
+            state2Controller.$inject = ['$scope', '$timeout'];
+            angular.module('myApp.controllers').controller('state2Controller', state2Controller);
+        })()
+    </script>
+</head>
+
+<body ng-app="myApp">
+    <div class="card col-5">
+        <div ng-controller="state2Controller as vm" class="row range-datepicker">
+
+            <div class="col-6">
+                <div class="range-datepicker__selected-date">
+                    <span class="range-datepicker__label">de</span>
+                    <span class="range-datepicker__date">{{ vm.dt1 | date:'MM/yyyy' }}</span>
+                </div>
+                <div uib-datepicker ng-model="vm.date1" class="range-datepicker__datepicker-one" datepicker-options="vm.options1" ng-change="vm.change(vm.date1)"></div>
+                
+            </div>
+            <div class="col-6">
+                <div class="range-datepicker__selected-date">
+                <span class="range-datepicker__label">até</span>
+                <span class="range-datepicker__date">{{ vm.dt2 | date:'MM/yyyy' }}</span>
+                </div>
+                <div uib-datepicker ng-model="vm.date2" class="range-datepicker__datepicker-two" datepicker-options="vm.options2" ng-change="vm.change(vm.date2)"></div>
+                
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

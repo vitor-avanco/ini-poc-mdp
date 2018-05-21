@@ -1,0 +1,204 @@
+$preto: #333333;
+$cinza: #f1f1f1;
+$laranja: #ec7404;
+div.row {
+    height: auto;
+}
+
+.range-datepicker {
+    padding: 15px;
+    &__selected-date {
+        color: #333;
+        margin-bottom: 20px;
+    }
+    &__label {
+        display: block;
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 5px;
+    }
+    &__date {
+        display: inline-block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #333333;
+        border-bottom: 1px solid #333;
+        line-height: 22px;
+        min-height: 22px;
+        min-width: 80px;
+        
+    }
+    &__datepicker-two {
+        .period.active button {
+            border-radius: 0px;
+            background-color: $cinza;
+            padding: 0px;
+            border: 0px;
+            &.active {
+                color: #fff;
+                background: $laranja;
+                border: 0px;
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+            }
+        }
+    }
+    &__datepicker-one {
+        .period.active button {
+            border-radius: 0px;
+            background-color: $cinza;
+            padding: 0px;
+            border: 0px;
+            &.active {
+                color: #fff;
+                background: $laranja;
+                border: 0px;
+                border-top-left-radius: 8px;
+                border-bottom-left-radius: 8px;
+            }
+        }
+    }
+    .uib-monthpicker {
+        outline: none;
+    }
+    multiselect {
+        display: block;
+    }
+    multiselect>.btn-group {
+        min-width: 180px;
+    }
+    multiselect .btn {
+        width: 100%;
+        background-color: #FFF;
+    }
+    multiselect .btn.has-error {
+        border: 1px solid #a94442 !important;
+        color: #db524b;
+    }
+    multiselect .dropdown-menu {
+        max-height: 300px;
+        min-width: 200px;
+        overflow-y: auto;
+    }
+    multiselect .dropdown-menu .filter>input {
+        width: 99%;
+    }
+    multiselect .dropdown-menu .filter .glyphicon {
+        cursor: pointer;
+        pointer-events: all;
+    }
+    multiselect .dropdown-menu {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 2px;
+    }
+    multiselect>.btn-group>button {
+        padding-right: 20px;
+    }
+    multiselect>.btn-group>button>.caret {
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid black;
+        right: 5px;
+        top: 45%;
+        position: absolute;
+    }
+    multiselect .dropdown-menu>li>a {
+        padding: 3px 10px;
+        cursor: pointer;
+    }
+    multiselect .dropdown-menu>li>a i {
+        margin-right: 4px;
+    }
+    .glyphicon-none:before {
+        content: "\e013";
+        color: transparent !important;
+    }
+    .period.active button {
+        border-radius: 0px;
+        background-color: $cinza;
+        padding: 0px;
+        border: 0px;
+        &.active {
+            color: #fff;
+            background: $laranja;
+            border: 0px;
+        }
+    }
+    table {
+        margin-bottom: 0px;
+        thead {
+            background: $cinza;
+            overflow: hidden;
+            border-right: 1px solid $cinza;
+            tr {
+                height: 50px;
+                th {
+                    height: 50px;
+                    padding: 0px;
+                    border: 0px;
+                    vertical-align: middle;
+                    button {
+                        height: 40px;
+                        background-color: transparent;
+                        &.uib-left {
+                            background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxMjkgMTI5IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMjkgMTI5IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4Ij4KICA8Zz4KICAgIDxwYXRoIGQ9Im04OC42LDEyMS4zYzAuOCwwLjggMS44LDEuMiAyLjksMS4yczIuMS0wLjQgMi45LTEuMmMxLjYtMS42IDEuNi00LjIgMC01LjhsLTUxLTUxIDUxLTUxYzEuNi0xLjYgMS42LTQuMiAwLTUuOHMtNC4yLTEuNi01LjgsMGwtNTQsNTMuOWMtMS42LDEuNi0xLjYsNC4yIDAsNS44bDU0LDUzLjl6IiBmaWxsPSIjMDAwMDAwIi8+CiAgPC9nPgo8L3N2Zz4K);
+                            background-position: 20% center;
+                            background-size: 17px;
+                            background-repeat: no-repeat;
+                            box-shadow: none;
+                        }
+                        &.uib-right {
+                            background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxMjkgMTI5IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMjkgMTI5IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4Ij4KICA8Zz4KICAgIDxwYXRoIGQ9Im00MC40LDEyMS4zYy0wLjgsMC44LTEuOCwxLjItMi45LDEuMnMtMi4xLTAuNC0yLjktMS4yYy0xLjYtMS42LTEuNi00LjIgMC01LjhsNTEtNTEtNTEtNTFjLTEuNi0xLjYtMS42LTQuMiAwLTUuOCAxLjYtMS42IDQuMi0xLjYgNS44LDBsNTMuOSw1My45YzEuNiwxLjYgMS42LDQuMiAwLDUuOGwtNTMuOSw1My45eiIgZmlsbD0iIzAwMDAwMCIvPgogIDwvZz4KPC9zdmc+Cg==);
+                            background-position: 80% center;
+                            background-size: 17px;
+                            background-repeat: no-repeat;
+                            box-shadow: none;
+                        }
+                    }
+                }
+            }
+        }
+        tbody {
+            border: 1px solid $cinza;
+            overflow: hidden;
+            tr {
+                &:first-child{
+                    td{
+                        button{
+                            margin-top: 20px;
+                        }
+                    }
+                }
+                td {
+                    width: 25%;
+                    border: 0px;
+                    padding: 0px;
+                    vertical-align: middle;
+                    button {
+                        vertical-align: middle;
+                        height: 35px;
+                        border: 0px;
+                        margin-top: 10px;
+                        margin-bottom: 10px;
+                        font-size: 0.8rem;
+                        font-weight: 600;
+                        color: #333333;
+                        .text-info {
+                            color: inherit !important;
+                        }
+                        &:hover {
+                            background: $cinza;
+                        }
+                        &:disabled {
+                            opacity: 0.3;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .row {
+        height: auto;
+    }
+}
