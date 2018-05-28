@@ -1,0 +1,7 @@
+{
+    "matricula" : "valido",
+    "preaprovado" : {
+        "minimo" : 80,
+        "maximo" : 50540
+    }
+}

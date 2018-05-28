@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" media="screen" href="https://internetpf.itau.com.br/estatico/commons/css/normalize.css">
+    <link rel="stylesheet" media="screen" href="https://internetpf.itau.com.br/estatico/commons/css/itau-style.css">
+    <link rel="stylesheet" media="screen" href="https://internetpf.itau.com.br/estatico/commons/css/itau-header.css">
+    <link rel="stylesheet" media="screen" href="https://internetpf.itau.com.br/estatico/commons/css/itau-footer.css">
+    <link rel="stylesheet" media="screen" href="https://internetpf.itau.com.br/estatico/commons/css/chosen/chosen.css">
+
+    <script type="text/javascript" src="https://internetpf.itau.com.br/estatico/distribution/libs/1.0.7/libs.js"></script>
+    <script type="text/javascript" src="https://internetpf.itau.com.br/estatico/distribution/core/2.3.0/core.js"></script>
+    <script type="text/javascript" src="https://internetpf.itau.com.br/estatico/distribution/front/1.0.21/front.js"></script>
+
+    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+
+    <!-- Dependencias do Angular -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.6.1/angular-locale_pt-br.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-messages.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-aria.js"></script>
+
+
+    <!-- Tooltip -->
+    <link rel="stylesheet" media="screen" href="app/tooltip.min.css">
+    <script src="app/tooltip.min.js"></script>
+    
+    <!-- Mascara de valor -->
+    <script src="app/directives/input/input-directive.js"></script>
+
+
+</head>
+
+<body ng-app="MyApp">
+    <div class="container">
+        <div class="simulador" ng-controller="myController">
+            <form name="simulador">
+                <div class="row clearfix">
+                    <div class="col4">
+                        <div class="form-group">
+                            <ng-messages for="simulador.numeroMatricula.$error" ng-show="simulador.numeroMatricula.$touched" role="alert">
+                                    <ng-message when="required">Digite o numero da sua matrícula</ng-message>
+                                    <ng-message when="invalid">Digite um número de matrícula válido</ng-message>
+                            </ng-messages>
+
+                            <label for="inputForm0" aria-hidden="true" class="input-description">Número da Matricula</label>
+                            <input type="text" id="inputForm0" name="numeroMatricula" ng-model="numeroMatricula" ng-blur="verificaMatricula(numeroMatricula)" aria-label="Digite o seu número de matricula " class="form-control" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col4">
+                        <div class="form-group">
+                            <small ng-show="valorMinimo > 0" >Seu crédito pré-aprovado é de {{ valorMinimo | currency }} a {{ valorMaximo | currency }}</small>
+                            <ng-messages for="simulador.valorEmprestimo.$error" ng-show="simulador.valorEmprestimo.$touched" role="alert">
+                                    <ng-message when="required">Digite um valor entre {{valorMinimo | currency}} e {{valorMaximo | currency}}</ng-message>
+                                    <ng-message when="min">O valor minimo para seu emprestimo são de {{valorMinimo | currency}}</ng-message>
+                                    <ng-message when="max">O valor minimo para seu emprestimo são de {{valorMaximo | currency}}</ng-message>
+                            </ng-messages>
+
+                            <label for="inputForm1" aria-hidden="true" class="input-description">Quanto você precisa?</label>
+                            <input type="text" money-mask id="inputForm1" placeholder="R$00.000,00" name="valorEmprestimo" ng-model="valorEmprestimo"  ng-blur="checarMinMaxEmprestimo(valorEmprestimo)" ng-change="checarMinMaxEmprestimo(valorEmprestimo)" aria-label="Digite o quanto você precisa de empréstimo, o valor deve estar entre {{valorMinimo | currency}} e {{valorMaximo | currency}} " class="form-control" ng-disabled="numeroDaMatricula == false" required />
+                        </div>
+                    </div>
+
+
+                    <div class="col4">
+                        <div class="form-group">
+                            <label>
+                                <input type="radio" value="1" name="opcaoSimulacao" ng-model="opcaoSimulacao" aria-label="Simular por valor mínimo mensal" ng-required="!opcaoSimulacao" ng-disabled="simulador.valorEmprestimo.$valid != true" ng-change="numeroParcelas = null; simulador.numeroParcelas.$touched = false">
+                                <span class="select-description" aria-hidden="true">por valor</span>
+                                <button type="button" class="tooltip-container" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top">
+                                    Dica
+                                </button>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <ng-messages for="simulador.valorParcela.$error" ng-show="simulador.valorParcela.$touched" role="alert">
+                                    <ng-message when="required">Digite um valor de parcela entre {{valorMinimoParcela | currency}} e {{valorMaximoParcela | currency}}</ng-message>
+                                    <ng-message when="min">O valor mínimo da parcela é de {{valorMinimoParcela | currency}}</ng-message>
+                                    <ng-message when="max">O valor máximo da parcela é de {{valorMaximoParcela | currency}}</ng-message>
+                            </ng-messages>
+                            <label for="inputForm2" aria-hidden="true" class="input-description">Quanto você quer pagar por mês?</label>
+                            <input type="text" money-mask id="inputForm2" placeholder="R$00.000,00" name="valorParcela" ng-model="valorParcela" ng-focus="hasFocus = true" ng-change="checarMinMaxParcela(valorParcela)" aria-label="Digite o quanto você precisa de empréstimo, o valor deve estar entre R$XXX e R$XXXX " class="form-control" ng-disabled="opcaoSimulacao != 1" ng-required="opcaoSimulacao == 1" />
+                            <small ng-hide="simulador.valorEmprestimo.$valid != true">valor entre {{valorMinimoParcela | currency}} e {{valorMaximoParcela | currency}}</small>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col4">
+                        <div class="form-group">
+                            <label>
+                                <input type="radio" value="2" name="opcaoSimulacao" ng-model="opcaoSimulacao" aria-label="Simular por quantidade de parcelas" ng-required="!opcaoSimulacao" ng-disabled="simulador.valorEmprestimo.$valid != true" ng-change="valorParcela = null; simulador.valorParcela.$touched = false">
+                                <span class="select-description" aria-hidden="true">por parcelas</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <ng-messages for="simulador.numeroParcelas.$error" ng-show="simulador.numeroParcelas.$touched" role="alert">
+                                    <ng-message when="required">Digite um número de parcelas entre {{quantidadeMinimaParcelas}} e {{quantidadeMaximaParcelas}}</ng-message>
+                                    <ng-message when="min">O numero mínimo de parcelas são {{quantidadeMinimaParcelas}} vezes</ng-message>
+                                    <ng-message when="max">O numero máximo de parcelas são {{quantidadeMaximaParcelas}} vezes</ng-message>
+                            </ng-messages>
+                            <label for="inputForm3" aria-hidden="true" class="input-description">em quantas vezes?</label>
+                            <input type="text" id="inputForm3" name="numeroParcelas" placeholder="000 vezes" ng-model="numeroParcelas" ng-focus="hasFocus = true" ng-change="checarNumeroParcelas(numeroParcelas)" aria-label="Digite o quanto você precisa de empréstimo, o valor deve estar entre R$XXX e R$XXXX " class="form-control" ng-disabled="opcaoSimulacao != 2" ng-required="opcaoSimulacao == 2" />
+                            <small ng-hide="simulador.valorEmprestimo.$valid != true" >quantidade entre {{quantidadeMinimaParcelas}} e {{quantidadeMaximaParcelas}}</small>
+                        </div>
+                    </div>
+
+                    <div class="col12">
+                        <button ng-disabled="simulador.$invalid">simule seu emprestimo</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="opcoes-de-emprestimos">
+                <div class="row clearfix">
+                    <div class="col4">
+                        <form name="opcaoPrincipal">
+                            <div class="opcoes-de-emprestimos__opcao--principal">
+                                <div class="opcoes-de-emprestimos__nome"></div>
+                                <div class="opcoes-de-emprestimos__info"></div>
+                                <div class="opcoes-de-emprestimos__info"></div>
+                                <div class="opcoes-de-emprestimos__acao">
+                                    <input type="submit" value="escolher" >
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col4">
+                        <form name="sugestao">
+                            <div class="opcoes-de-emprestimos__opcao">
+                                <div class="opcoes-de-emprestimos__nome"></div>
+                                <div class="opcoes-de-emprestimos__info"></div>
+                                <div class="opcoes-de-emprestimos__info"></div>
+                                <div class="opcoes-de-emprestimos__acao">
+                                    <input type="submit" value="escolher" >
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        var valorParcelas = {
+            minimo: 300,
+            maximo: 500.50,
+        }
+
+        var qtdParcelas = {
+            minimo: 6,
+            maximo: 36,
+        }
+        
+        $("#inputForm3").mask('##0 vezes', { reverse : true });
+
+        var app = angular.module("MyApp", ['ngMessages', 'money-mask', 'ngAria']);
+
+        app.controller("myController", function($timeout, $scope, ConsultaInformacoes) {
+
+            $scope.numeroDaMatricula = false;
+
+            $scope.hasFocus = false;
+
+            $scope.valorMinimo = 0;
+            $scope.valorMaximo = 0;
+
+            $scope.valorMinimoParcela = valorParcelas.minimo;
+            $scope.valorMaximoParcela = valorParcelas.maximo;
+
+            $scope.quantidadeMinimaParcelas = qtdParcelas.minimo;
+            $scope.quantidadeMaximaParcelas = qtdParcelas.maximo;
+
+            
+
+            $scope.verificaMatricula = function(valor){
+                if(valor == null){
+                    $scope.simulador.numeroMatricula.$error.required = true;
+                    return false;
+                }
+                ConsultaInformacoes.verificaMatricula().then(function(retorno){
+                    if(retorno.data.matricula == "valido"){
+                        $scope.numeroDaMatricula = true;
+                        $scope.simulador.numeroMatricula.$valid = true;
+                        $scope.simulador.numeroMatricula.$error.invalid = false;
+                        $scope.simulador.numeroMatricula.$invalid = false;
+
+                        $scope.valorMinimo = retorno.data.preaprovado.minimo;
+                        $scope.valorMaximo = retorno.data.preaprovado.maximo;
+
+                        setTimeout(function(){
+                            $("#inputForm1").focus();
+                        }, 50)
+
+                    }else{
+                        $scope.numeroDaMatricula = false;
+                        $scope.simulador.numeroMatricula.$valid = false;
+                        $scope.simulador.numeroMatricula.$error.invalid = true;
+                        $scope.simulador.numeroMatricula.$invalid = true;
+
+                        $scope.valorMinimo = 0;
+                        $scope.valorMaximo = 0;
+
+                        return false;
+                    }
+                });
+            }
+
+            $scope.checarMinMaxEmprestimo = function(valor){
+                if(valor != null){
+                    var valorNumerico = valor.replace(/\./g, '').replace(/,/g, '.').replace(/[^\d.]/g, '');
+                    if(valorNumerico < $scope.valorMinimo){
+                        $scope.simulador.valorEmprestimo.$error.min = true;
+                        $scope.simulador.valorEmprestimo.$valid = false;
+                        return false;
+                    }else{
+                        $scope.simulador.valorEmprestimo.$error.min = false;
+                        $scope.simulador.valorEmprestimo.$valid = true;
+                    }
+                    if(valorNumerico > $scope.valorMaximo){
+                        $scope.simulador.valorEmprestimo.$error.max = true;
+                        $scope.simulador.valorEmprestimo.$valid = false;
+                        return false;
+                    }else{
+                        $scope.simulador.valorEmprestimo.$error.max = false;
+                        $scope.simulador.valorEmprestimo.$valid = true;
+                    }
+                    $scope.simulador.valorEmprestimo.$invalid = false;
+                }
+            }
+
+            $scope.checarMinMaxParcela = function(valor){
+                if(valor != null){
+                    var valorNumerico = valor.replace(/\./g, '').replace(/,/g, '.').replace(/[^\d.]/g, '');
+                    if(valorNumerico < $scope.valorMinimoParcela){
+                        $scope.simulador.valorParcela.$error.min = true;
+                        $scope.simulador.$invalid = true;
+                        return false;
+                        
+                    }else{
+                        $scope.simulador.valorParcela.$error.min = false;
+                        $scope.simulador.$invalid = false;
+                    }
+                    if(valorNumerico > $scope.valorMaximoParcela){
+                        $scope.simulador.valorParcela.$error.max = true;
+                        $scope.simulador.$invalid = true;
+                        return false;
+                    }else{
+                        $scope.simulador.valorParcela.$error.max = false;
+                        $scope.simulador.$invalid = false;
+                    }
+
+                    $scope.simulador.valorParcela.$invalid = false;
+                }
+            }
+
+            $scope.checarNumeroParcelas = function(valor){
+                if(valor != null){
+                    var valorNumerico = valor.replace(/\./g, '').replace(/,/g, '.').replace(/[^\d.]/g, '');
+                    console.log(valorNumerico);
+                    if(valorNumerico < $scope.quantidadeMinimaParcelas){
+                        $scope.simulador.numeroParcelas.$error.min = true;
+                        $scope.simulador.$invalid = true;
+                        return false;
+                        
+                    }else{
+                        $scope.simulador.numeroParcelas.$error.min = false;
+                        $scope.simulador.$invalid = false;
+                    }
+                    if(valorNumerico > $scope.quantidadeMaximaParcelas){
+                        $scope.simulador.numeroParcelas.$error.max = true;
+                        $scope.simulador.$invalid = true;
+                        return false;
+                        
+                    }else{
+                        $scope.simulador.numeroParcelas.$error.max = false;
+                        $scope.simulador.$invalid = false;
+                    }
+
+                    $scope.simulador.numeroParcelas.$invalid = false;
+                }
+            }
+            
+        });
+
+        
+        // Service
+        app.service('ConsultaInformacoes', ConsultaInformacoes)
+        ConsultaInformacoes.$inject = ['$http'];
+
+        function ConsultaInformacoes($http) {
+
+            this.verificaMatricula = function(valor) {
+                return $http.get('mock/matricula.json');
+             };
+    
+
+             
+
+        }
+
+
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
+    
+</body>
+
+</html>
